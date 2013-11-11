@@ -18,7 +18,7 @@ Add a .environment file into the root of your project:
  |-- .git
  |-- lib
      |-- MyApp
-     |   |-- Environment.pm (<-- next step)
+     |   |-- Environment.pm (<-- next step)
      |-- MyApp.pm
 
 Define a subclass for your application:
