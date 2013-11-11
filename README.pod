@@ -1,14 +1,14 @@
-package MooseX::Project::Environment;
+=pod
 
-# ABSTRACT: Set and detect project environment via .environment file.
+=encoding UTF-8
 
-use Moose;
-with 'MooseX::Project::Environment::Role';
-with 'MooseX::Role::Flyweight';
+=head1 NAME
 
-use version; our $VERSION = version->new('v1.0.0');
+MooseX::Project::Environment - Set and detect project environment via .environment file.
 
-use overload '""' => sub { shift->project_environment };
+=head1 VERSION
+
+version v1.0.0
 
 =head1 SYNOPSIS
 
@@ -18,7 +18,7 @@ Add a .environment file into the root of your project:
  |-- .git
  |-- lib
      |-- MyApp
-     |Â Â  |-- Environment.pm (<-- next step)
+     |   |-- Environment.pm (<-- next step)
      |-- MyApp.pm
 
 Define a subclass for your application:
@@ -85,6 +85,14 @@ this class directly, it will die. This is because it uses C<%INC> to determine
 the location of itself, and that will report incorrectly if the class file is
 stored in the main Perl lib directory.
 
-=cut
+=head1 AUTHOR
 
-1; ## eof
+Roman F. <romanf@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2013 by Roman F..
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
