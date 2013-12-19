@@ -13,6 +13,7 @@ use overload '""' => sub { shift->project_environment };
 =head1 SYNOPSIS
 
 Add a .environment file into the root of your project:
+
   .
   |-- .environment (<-- add this)
   |-- .git

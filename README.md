@@ -9,13 +9,14 @@ version v1.0.0
 # SYNOPSIS
 
 Add a .environment file into the root of your project:
-  .
-  |-- .environment (<-- add this)
-  |-- .git
-  |-- lib
-      |-- MyApp
-      |  |-- Environment.pm
-      |-- MyApp.pm
+
+    .
+    |-- .environment (<-- add this)
+    |-- .git
+    |-- lib
+        |-- MyApp
+        |  |-- Environment.pm
+        |-- MyApp.pm
 
 Define a subclass for your application:
 
