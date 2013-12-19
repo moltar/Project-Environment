@@ -13,13 +13,13 @@ use overload '""' => sub { shift->project_environment };
 =head1 SYNOPSIS
 
 Add a .environment file into the root of your project:
- .
- |-- .environment (<-- add this)
- |-- .git
- |-- lib
-     |-- MyApp
-     |   |-- Environment.pm (<-- next step)
-     |-- MyApp.pm
+  .
+  |-- .environment (<-- add this)
+  |-- .git
+  |-- lib
+      |-- MyApp
+      |  |-- Environment.pm
+      |-- MyApp.pm
 
 Define a subclass for your application:
 
