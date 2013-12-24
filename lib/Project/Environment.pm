@@ -1,9 +1,9 @@
-package MooseX::Project::Environment;
+package Project::Environment;
 
 # ABSTRACT: Set and detect project environment via .environment file.
 
 use Moose;
-with 'MooseX::Project::Environment::Role';
+with 'Project::Environment::Role';
 with 'MooseX::Role::Flyweight';
 
 use version; our $VERSION = version->new('v1.0.0');
@@ -27,7 +27,7 @@ Define a subclass for your application:
  package MyApp::Environment;
 
  use Moose;
- extends 'MooseX::Project::Environment';
+ extends 'Project::Environment';
 
  1;
 
@@ -46,7 +46,7 @@ root.
 You can also set the environment via C<%ENV>.
 
 Most of the functionality defined and documented in
-L<MooseX::Project::Environment::Role>.
+L<Project::Environment::Role>.
 
 This consumer class provides 2 things:
 
@@ -61,9 +61,9 @@ the environment is cached.
 
 =head2 stringification
 
-An instance of L<MooseX::Project::Environment> will stringify into the
+An instance of L<Project::Environment> will stringify into the
 environment name properly. This is useful if you were to store the instance
-of the L<MooseX::Project::Environment> object in an attribute, rather than
+of the L<Project::Environment> object in an attribute, rather than
 the string name of the environment.
 
  has environment => (

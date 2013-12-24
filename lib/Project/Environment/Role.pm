@@ -1,6 +1,6 @@
-package MooseX::Project::Environment::Role;
+package Project::Environment::Role;
 
-# ABSTRACT: Moose role for MooseX::Project::Environment
+# ABSTRACT: Moose role for Project::Environment
 
 use Moose::Role;
 use MooseX::Types::Path::Tiny qw(Path);
@@ -14,7 +14,7 @@ use Module::Path qw(module_path);
 
 =head1 DESCRIPTION
 
-This role defines most of the logic for L<MooseX::Project::Environment>.
+This role defines most of the logic for L<Project::Environment>.
 
 =cut
 
@@ -43,7 +43,7 @@ sub _build_project_root {
     my $class = ref $self || $self;
 
     my $file
-        = $class eq 'MooseX::Project::Environment'
+        = $class eq 'Project::Environment'
         ? $self->_caller->[1]
         : $self->_module_path;
 
@@ -125,7 +125,7 @@ could be detected.
 
  package MyApp::Environment;
  use Moose;
- extends 'MooseX::Project::Environment';
+ extends 'Project::Environment';
 
  has '+default_environment' => (default => 'development');
 

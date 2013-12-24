@@ -1,7 +1,7 @@
 package ProjectX::Direct;
 
 use Moose;
-use MooseX::Project::Environment;
+use Project::Environment;
 
 =head2 env
 
@@ -11,7 +11,7 @@ use MooseX::Project::Environment;
 
 has env => (
     is      => 'ro',
-    isa     => 'MooseX::Project::Environment',
+    isa     => 'Project::Environment',
     lazy    => 1,
     builder => '_build_env',
 );
@@ -19,7 +19,7 @@ has env => (
 sub _build_env {
     my $self = shift;
 
-    return MooseX::Project::Environment->new(environment_filename => 'environment');
+    return Project::Environment->new(environment_filename => 'environment');
 }
 
 1;

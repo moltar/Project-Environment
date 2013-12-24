@@ -1,6 +1,6 @@
 # NAME
 
-MooseX::Project::Environment - Set and detect project environment via .environment file.
+Project::Environment - Set and detect project environment via .environment file.
 
 # VERSION
 
@@ -23,7 +23,7 @@ Define a subclass for your application:
     package MyApp::Environment;
 
     use Moose;
-    extends 'MooseX::Project::Environment';
+    extends 'Project::Environment';
 
     1;
 
@@ -42,7 +42,7 @@ root.
 You can also set the environment via `%ENV`.
 
 Most of the functionality defined and documented in
-[MooseX::Project::Environment::Role](http://search.cpan.org/perldoc?MooseX::Project::Environment::Role).
+[Project::Environment::Role](http://search.cpan.org/perldoc?Project::Environment::Role).
 
 This consumer class provides 2 things:
 
@@ -57,9 +57,9 @@ the environment is cached.
 
 ## stringification
 
-An instance of [MooseX::Project::Environment](http://search.cpan.org/perldoc?MooseX::Project::Environment) will stringify into the
+An instance of [Project::Environment](http://search.cpan.org/perldoc?Project::Environment) will stringify into the
 environment name properly. This is useful if you were to store the instance
-of the [MooseX::Project::Environment](http://search.cpan.org/perldoc?MooseX::Project::Environment) object in an attribute, rather than
+of the [Project::Environment](http://search.cpan.org/perldoc?Project::Environment) object in an attribute, rather than
 the string name of the environment.
 
     has environment => (

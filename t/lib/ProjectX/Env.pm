@@ -1,7 +1,7 @@
 package ProjectX::Env;
 
 use Moose;
-extends 'MooseX::Project::Environment';
+extends 'Project::Environment';
 
 has '+environment_filename' => (default => 'environment');
 

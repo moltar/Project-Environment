@@ -1,18 +1,18 @@
-# MooseX::Project::Environment
+# Project::Environment
 
 use Test::Most;
 
 use lib::abs './lib';
 
 subtest 'use_ok' => sub {
-    use_ok 'MooseX::Project::Environment';
+    use_ok 'Project::Environment';
     use_ok 'ProjectX::Env';
     use_ok 'ProjectX::Direct';
 };
 
 subtest 'project_root used directly' => sub {
     my $pd = ProjectX::Direct->new;
-    ok $pd->env, 'Build MooseX::Project::Environment object successfully.';
+    ok $pd->env, 'Build Project::Environment object successfully.';
     is $pd->env->project_environment, 'develop', 'Found project env directly.';
 };
 
