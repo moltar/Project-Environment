@@ -6,7 +6,7 @@ use Moose;
 with 'Project::Environment::Role';
 with 'MooseX::Role::Flyweight';
 
-use version; our $VERSION = version->new('v1.0.0');
+use version; our $VERSION = version->new('v1.1.0');
 
 use overload '""' => sub { shift->project_environment };
 
