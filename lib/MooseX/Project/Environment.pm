@@ -88,4 +88,15 @@ stored in the main Perl lib directory.
 
 =cut
 
-1; ## eof
+has _caller => (
+    is      => 'ro',
+    isa     => 'ArrayRef',
+    default => sub {
+        for (0 .. 10) {
+            my @caller = caller($_);
+            return \@caller if $caller[3] eq 'Moose::Object::new';
+        }
+    },
+);
+
+1;    ## eof

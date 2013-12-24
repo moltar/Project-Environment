@@ -3,12 +3,14 @@ package MooseX::Project::Environment::Role;
 # ABSTRACT: Moose role for MooseX::Project::Environment
 
 use Moose::Role;
-use MooseX::Types::Path::Class;
+use MooseX::Types::Path::Tiny qw(Path);
 
 use Carp qw();
 use File::Spec qw();
-use Path::Class qw();
+use Path::Tiny qw(path);
 use Class::Inspector qw();
+use Path::FindDev qw(find_dev);
+use Module::Path qw(module_path);
 
 =head1 DESCRIPTION
 
@@ -18,129 +20,66 @@ This role defines most of the logic for L<MooseX::Project::Environment>.
 
 =head1 ATTRIBUTES
 
-=head2 project_root_files
+=head2 project_root
 
-A list of files that usually reside in the root of a project. A presence of
-this file indicates the root of the project. The following files are currently
-defined:
+An instance of L<Path::Tiny>, which defines the root path of the project
+as detected by L<Path::FindDev>.
 
- cpanfile
- .git
- .gitmodules
- Makefile.PL
- Build.PL
-
-=head3 build_project_root_files
-
-A builder method to get the list of files. You can overload this builder to
-define your own list.
-
-=head3 all_project_root_files
-
-Returns an array of filenames.
-
-=head3 add_project_root_file($filename)
-
-Prepend a filename to the list. Can be used to quickly add a custom filename:
-
- package MyApp::Environment;
- use Moose;
- extends 'MooseX::Project::Environment';
-
- sub BUILD {
-     my $self = shift;
-
-     $self->add_project_root_file('dist.ini');
- }
+Will croak if it cannot successfully build project_root.
 
 =cut
 
-has project_root_files => (
+has project_root => (
     is      => 'ro',
-    isa     => 'ArrayRef[Str]',
-    traits  => ['Array'],
-    lazy    => 1,
-    builder => 'build_project_root_files',
-    handles => {
-        all_project_root_files => 'elements',
-        add_project_root_file  => 'unshift',
-    },
-);
-
-sub build_project_root_files {
-    return [qw(
-            cpanfile
-            .git
-            .gitmodules
-            Makefile.PL
-            Build.PL
-            )];
-}
-
-=head2 project_home
-
-An instance of L<Path::Class::Dir>, which defines the root path of the project
-as detected by one of the L</project_root_files> filenames.
-
-Current location is determined by looking at C<%INC>, and then traversing
-upwards and checking for presence of one of the L</project_root_files> filenames.
-
-Will croak if it cannot successfully build project_home.
-
-=cut
-
-has project_home => (
-    is      => 'ro',
-    isa     => 'Path::Class::Dir',
+    isa     => Path,
     coerce  => 1,
     lazy    => 1,
-    builder => '_build_project_home',
+    builder => '_build_project_root',
 );
 
-sub _build_project_home {
+sub _build_project_root {
     my $self = shift;
 
     my $class = ref $self || $self;
 
-    if ($class eq 'MooseX::Project::Environment') {
-        Carp::croak('You must inherit from MooseX::Project::Environment.');
-    }
+    my $file
+        = $class eq 'MooseX::Project::Environment'
+        ? $self->_caller->[1]
+        : $self->_module_path;
 
-    my $dir
-        = Path::Class::Dir->new($INC{ Class::Inspector->filename($class) });
+    my $dir = find_dev(path($file)->dirname);
 
-    ## inline package declarations will not have a path
     unless ($dir) {
-        Carp::croak("Cannot find path for $class via %INC");
+        $dir = find_dev(File::Spec->curdir());
     }
 
-    my $_parent = sub {
-        my $dir    = shift;
-        my $parent = $dir->parent;
-        return if $parent eq File::Spec->rootdir;
-        return $parent;
-    };
-
-    while (my $parent = $_parent->($dir)) {
-        foreach my $project_root_file ($self->all_project_root_files) {
-            if (-e $dir->file($project_root_file)) {
-                return $dir;
-            }
-        }
-        $dir = $parent;
+    unless ($dir) {
+        Carp::croak(
+                  q{}
+                . 'Cannot build project_root. '
+                . 'Please set project_root attribute by hand or create one of '
+                . 'the project_root_files in the root of the project.',
+        );
     }
 
-    Carp::croak(
-              q{}
-            . 'Cannot build project_home. '
-            . 'Please set project_home attribute by hand or create one of '
-            . 'the project_root_files in the root of the project.',
-    );
+    return $dir;
+}
+
+=head2 mpath()
+
+
+
+=cut
+
+sub _module_path {
+    my ($self,) = @_;
+
+    return module_path(ref $self || $self);
 }
 
 =head2 environment_filename
 
-A name of the file to look for in the L</project_home> directory to read the
+A name of the file to look for in the L</project_root> directory to read the
 environment string from.
 
 File must contain a single line with the environment name. It will attempt to
@@ -161,13 +100,13 @@ has environment_filename => (
 =head2 environment_path
 
 Full path to the L</environment_filename>. Basically just concatenation of
-C<project_home> and C<environment_filename>.
+C<project_root> and C<environment_filename>.
 
 =cut
 
 has environment_path => (
     is      => 'ro',
-    isa     => 'Path::Class::File',
+    isa     => Path,
     coerce  => 1,
     lazy    => 1,
     builder => '_build_environment_path',
@@ -176,7 +115,7 @@ has environment_path => (
 sub _build_environment_path {
     my $self = shift;
 
-    return $self->project_home->file($self->environment_filename);
+    return $self->project_root->child($self->environment_filename);
 }
 
 =head2 default_environment
@@ -234,7 +173,7 @@ then we use that as C<project_environment>.
 
 =item C<.environment>
 
-Second, we check the C<.environment> file in the C<project_home>.
+Second, we check the C<.environment> file in the C<project_root>.
 
 =item C<default_environment>
 
@@ -264,7 +203,12 @@ sub _build_project_environment {
 
     ## now check .environment file
     if (-e $self->environment_path) {
-        return scalar $self->environment_path->slurp(chomp => 1);
+        my $env = scalar $self->environment_path->slurp;
+
+        if ($env) {
+            chomp($env);
+            return $env;
+        }
     }
 
     ## finally, try default
@@ -276,7 +220,7 @@ sub _build_project_environment {
               q{}
             . 'Cannot find environment file at '
             . $self->environment_path
-            . ' and no default_environment set.',
+            . ' and no default_environment is set.',
     );
 }
 

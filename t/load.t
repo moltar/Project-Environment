@@ -7,11 +7,13 @@ use lib::abs './lib';
 subtest 'use_ok' => sub {
     use_ok 'MooseX::Project::Environment';
     use_ok 'ProjectX::Env';
+    use_ok 'ProjectX::Direct';
 };
 
-subtest 'force inheritance' => sub {
-    throws_ok { MooseX::Project::Environment->new->project_home }
-    qr/You must inherit from/, 'You must inherit';
+subtest 'project_root used directly' => sub {
+    my $pd = ProjectX::Direct->new;
+    ok $pd->env, 'Build MooseX::Project::Environment object successfully.';
+    is $pd->env->project_environment, 'develop', 'Found project env directly.';
 };
 
 subtest 'project_environment' => sub {
