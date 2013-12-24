@@ -4,7 +4,7 @@ Project::Environment - Set and detect project environment via .environment file.
 
 # VERSION
 
-version v1.1.0
+version v1.2.0
 
 # SYNOPSIS
 
@@ -74,13 +74,6 @@ Somewhere else in the application code:
     } else {
         ## break everything
     }
-
-# CAVEAT
-
-You __must extend__ this class to use it in your application. You cannot use
-this class directly, it will die. This is because it uses `%INC` to determine
-the location of itself, and that will report incorrectly if the class file is
-stored in the main Perl lib directory.
 
 # AUTHOR
 
