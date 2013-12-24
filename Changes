@@ -1,6 +1,9 @@
 Revision history for MooseX-Project-Environment
 
 {{$NEXT}}
+    - Removed outdated caveat
+
+v1.1.0    Dec 24 2013
     - Fixed name
     - Fixed doc
 

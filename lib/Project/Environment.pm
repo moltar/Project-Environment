@@ -6,7 +6,7 @@ use Moose;
 with 'Project::Environment::Role';
 with 'MooseX::Role::Flyweight';
 
-use version; our $VERSION = version->new('v1.1.0');
+use version; our $VERSION = version->new('v1.2.0');
 
 use overload '""' => sub { shift->project_environment };
 
@@ -78,13 +78,6 @@ Somewhere else in the application code:
  } else {
      ## break everything
  }
-
-=head1 CAVEAT
-
-You B<must extend> this class to use it in your application. You cannot use
-this class directly, it will die. This is because it uses C<%INC> to determine
-the location of itself, and that will report incorrectly if the class file is
-stored in the main Perl lib directory.
 
 =cut
 
