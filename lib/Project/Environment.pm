@@ -52,7 +52,7 @@ This consumer class provides 2 things:
 
 =head2 singularity
 
-This isn't exactly a singleton. And the all of the magic is provided by
+This isn't exactly a singleton. And all of the magic is provided by
 L<MooseX::Role::Flyweight>.
 
 In short, all you have to do is call C<instance> constructor instead of C<new>
