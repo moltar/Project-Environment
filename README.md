@@ -4,7 +4,7 @@ Project::Environment - Set and detect project environment via .environment file.
 
 # VERSION
 
-version v1.0.0
+version v1.1.0
 
 # SYNOPSIS
 
@@ -48,7 +48,7 @@ This consumer class provides 2 things:
 
 ## singularity
 
-This isn't exactly a singleton. And the all of the magic is provided by
+This isn't exactly a singleton. And all of the magic is provided by
 [MooseX::Role::Flyweight](http://search.cpan.org/perldoc?MooseX::Role::Flyweight).
 
 In short, all you have to do is call `instance` constructor instead of `new`
